@@ -1,0 +1,47 @@
+name: ✨ Feature Request
+description: Suggest an idea or enhancement for Codecat.
+title: "[FEAT] Brief description of your idea"
+labels: ["enhancement", "feature-request"]
+assignees: "Exonymos"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for suggesting an idea to improve Codecat!**
+
+        **Before Submitting:**
+        - Have you checked if this idea has already been proposed in our [Issues](https://github.com/Exonymos/codecat/issues)?
+
+  - type: textarea
+    id: problem-related
+    attributes:
+      label: "❓ Is your feature request related to a problem? Please describe."
+      description: "A clear description of what the problem is, or the opportunity for a new feature."
+      placeholder: "e.g., I'm always frustrated when I have to manually exclude temporary files from my editor."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: "💡 Describe the solution you'd like"
+      description: "A clear description of what you want to happen. How would this feature work from your perspective?"
+      placeholder: "e.g., Add support for a `.codecatignore` file that works just like `.gitignore`."
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: "🔄 Describe alternatives you've considered (Optional)"
+      description: "A clear description of any alternative solutions or features you've considered."
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "📋 Additional Context (Optional)"
+      description: "Add any other context or mockups about the feature request here. Why would this be valuable?"
+    validations:
+      required: false

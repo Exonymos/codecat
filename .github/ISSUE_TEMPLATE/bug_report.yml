@@ -1,0 +1,74 @@
+name: 🐛 Bug Report
+description: Create a report to help us improve Codecat.
+title: "[BUG] Brief description of bug"
+labels: ["bug", "needs-triage"]
+assignees: "Exonymos"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for taking the time to file a bug report!** 
+        Please help us understand the problem by providing as much detail as possible.
+        
+        **Before Submitting:**
+        - Have you checked if this issue is already reported in our [Issues](https://github.com/Exonymos/codecat/issues)?
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "🔎 Describe the Bug"
+      description: "A clear and concise description of what the bug is. What did you see? What went wrong?"
+      placeholder: "e.g., When I run the `stats` command on a directory, it crashes."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: "🔁 To Reproduce"
+      description: "Steps to reliably reproduce the behavior. Please be specific!"
+      placeholder: |
+        1. Create a directory with a Python file.
+        2. Run `codecat stats .`
+        3. See error / unexpected behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: "✅ Expected Behavior"
+      description: "A clear and concise description of what you expected to happen."
+      placeholder: "e.g., I expected the command to complete successfully and show a statistics table."
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: "Codecat Version"
+      description: "Which version of Codecat are you using? (Run `codecat --version`)"
+      placeholder: "e.g., v1.0.0"
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: "💻 Your Environment"
+      description: |
+        - **Operating System:** [e.g., Windows 11, Ubuntu 24.04 LTS]
+        - **How are you running Codecat?** [e.g., From the downloaded .exe, From source via `pytest`]
+      value: |
+        - OS: 
+        - Running Method:
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: "📋 Additional Context (Optional)"
+      description: "Add any other context, error messages from the terminal, or relevant configuration details here."
+    validations:
+      required: false
