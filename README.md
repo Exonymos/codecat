@@ -6,10 +6,10 @@
 
 _Transform your entire codebase into a single, beautifully formatted Markdown document_
 
-<!-- [![CI/CD Status](https://github.com/Exonymos/codecat/actions/workflows/ci.yml/badge.svg)](https://github.com/Exonymos/codecat/actions/workflows/ci.yml)
-[![Latest Release](https://img.shields.io/github/v/release/Exonymos/codecat?display_name=tag&logo=github&color=brightgreen)](https://github.com/Exonymos/codecat/releases/latest) -->
+[![CI/CD Status](https://github.com/Exonymos/codecat/actions/workflows/ci.yml/badge.svg)](https://github.com/Exonymos/codecat/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/v/release/Exonymos/codecat?display_name=tag&logo=github&color=brightgreen)](https://github.com/Exonymos/codecat/releases/latest)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-yellow.svg)](https://opensource.org/license/gpl-3-0)
-<!-- [![Downloads](https://img.shields.io/github/downloads/Exonymos/codecat/total?color=blue&logo=github)](https://github.com/Exonymos/codecat/releases) -->
+[![Downloads](https://img.shields.io/github/downloads/Exonymos/codecat/total?color=blue&logo=github)](https://github.com/Exonymos/codecat/releases)
 [![Python Version](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 
 [**🚀 Quick Start**](#-quick-start) • [**📖 Usage**](#-usage) • [**💡 Examples**](#-examples) • [**🛠️ Development**](#%EF%B8%8F-development)
