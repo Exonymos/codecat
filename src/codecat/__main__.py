@@ -39,7 +39,7 @@ def main():
                 "Example Usage:\n"
                 "  [cyan]codecat --help[/cyan]\n\n"
                 "For more information, visit the GitHub README:\n"
-                "  [cyan link=https://github.com/your-repo/codecat?tab=readme-ov-file#-codecat]https://github.com/your-repo/codecat[/cyan]\n",
+                "  [cyan][link=https://github.com/exonymos/codecat?tab=readme-ov-file#-codecat]https://github.com/exonymos/codecat[/link][/cyan]",
                 title="Usage Error",
                 border_style="red",
                 padding=(1, 2),
