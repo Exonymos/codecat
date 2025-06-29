@@ -1,0 +1,58 @@
+# .gitignore
+
+# --- Python & Virtual Environments ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*venv*/
+env/
+ENV/
+.env*
+
+# --- Distribution / Packaging / Installer ---
+build/
+dist/
+downloads/
+eggs/
+*.egg-info/
+*.egg
+wheels/
+sdist/
+MANIFEST
+*.manifest
+file_version_info.txt
+
+# --- Test & Coverage Reports ---
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+coverage*
+coverage.xml
+.mypy_cache/
+*.tmp
+
+# --- IDEs / Editors ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+.idea/
+*.iml
+
+# --- OS generated files ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# --- Application Specific ---
+# Default output files from the application
+.codecat_config.json
+codecat_output.md
+*.log
+logs/
+
+# Local notes not meant for the repo
+.notcommit/

@@ -1,0 +1,95 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Setup: Install Dependencies",
+      "type": "shell",
+      // This command installs all dependencies for the project, including development dependencies from the pyproject.toml file.
+      "command": "pip install -e .[dev]",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "QA: Format Code (Black)",
+      "type": "shell",
+      "command": "black .",
+      "group": "none",
+      "presentation": {
+        "reveal": "silent"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "QA: Lint Code (Flake8)",
+      "type": "shell",
+      "command": "flake8 .",
+      "group": "none",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": ["$python"]
+    },
+    {
+      "label": "QA: Type Check (Pyright)",
+      "type": "shell",
+      "command": "pyright .",
+      "group": "none",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "QA: Run All Tests (Pytest)",
+      "type": "shell",
+      "command": "pytest",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "QA: Run All Tools",
+      "type": "shell",
+      "command": "black .; flake8 .; pyright .; pytest",
+      "group": "none",
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build: Create Windows Executable",
+      "type": "shell",
+      "command": "pyinstaller codecat.spec --noconfirm",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build: Create Linux Executable",
+      "type": "shell",
+      "command": "pyinstaller --noconfirm --onefile --console --name codecat src/codecat/__main__.py",
+      "group": {
+        "kind": "build"
+      },
+      "presentation": {
+        "reveal": "always"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

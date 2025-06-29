@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Codecat: Run (Verbose)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "src.codecat.__main__",
+      "args": ["run", ".", "-v", "--dry-run"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    },
+    {
+      "name": "Pytest: Run All Tests",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["tests/", "-v"],
+      "console": "integratedTerminal",
+      "justMyCode": true
+    }
+  ]
+}

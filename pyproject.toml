@@ -1,0 +1,97 @@
+# pyproject.toml
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+# --- Project Metadata ---
+[project]
+name = "codecat"
+version = "1.0.0"
+description = "A powerful, feature-rich command-line tool to aggregate source code into a single Markdown file."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Exonymos (Joy Barot)", email = "exonymos@gmail.com" }]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: GPL-3.0-only",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development :: Documentation",
+  "Topic :: Text Processing",
+  "Environment :: Console",
+  "Typing :: Typed",
+]
+dependencies = ["typer>=0.14,<0.17", "rich>=13,<15", "shellingham>=1.5,<2"]
+
+[project.optional-dependencies]
+dev = [
+  "black>=24,<26",
+  "flake8>=7,<8",
+  "pyright>=1.1,<2",
+  "pytest>=8,<9",
+  "pytest-cov>=6,<7",
+  "pytest-mock>=3,<4",
+  "pyinstaller>=6,<7",
+]
+
+[project.scripts]
+codecat = "codecat.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/Exonymos/codecat"
+Repository = "https://github.com/Exonymos/codecat"
+Issues = "https://github.com/Exonymos/codecat/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+# --- Tool Configurations ---
+
+[tool.black]
+line-length = 88
+target-version = ['py310', 'py311', 'py312']
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "-ra -q --color=yes --cov=src/codecat --cov-report=term-missing"
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+pythonpath = ["src", "."]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.pyright]
+include = ["src", "tests"]
+exclude = ["**/__pycache__", ".venv", ".venv312", "dist", "build"]
+typeCheckingMode = "basic"
+pythonVersion = "3.11"
+pythonPlatform = "All"
+
+reportMissingImports = "warning"
+reportMissingTypeStubs = "none"
+reportUnusedVariable = "warning"
+reportGeneralTypeIssues = "warning"
+reportOptionalSubscript = "warning"
+reportOptionalMemberAccess = "warning"
+reportOptionalCall = "warning"
+reportOptionalOperand = "warning"
+reportTypedDictNotRequiredAccess = "warning"
+
+[tool.coverage.run]
+source = ["src/codecat"]
+branch = true
+omit = ["*/__main__.py", "*/__init__.py", "*/constants.py", "tests/*", "generate_version_file.py"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true
+
+[tool.coverage.html]
+directory = "coverage_html_report"
+title = "Codecat Test Coverage Report"

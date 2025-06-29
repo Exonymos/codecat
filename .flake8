@@ -1,0 +1,27 @@
+# .flake8
+
+[flake8]
+# Set the maximum line length
+max-line-length = 88
+
+# A list of error/warning codes to ignore.
+# E501: Line too long
+# W503: Line break before binary operator
+# W504: line break after binary operator
+# E203: Whitespace before ':'
+ignore = E501, W503, W504, E203
+
+# A list of files and directories to exclude from linting.
+exclude =
+    .git,
+    __pycache__,
+    venv*,
+    .venv*,
+    .pytest_cache,
+    .vscode,
+    build/,
+    dist/,
+    *.egg-info
+
+# Set the McCabe cyclomatic complexity threshold.
+max-complexity = 13
