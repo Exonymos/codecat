@@ -69,7 +69,7 @@
     {
       "label": "Build: Create Windows Executable",
       "type": "shell",
-      "command": "pyinstaller codecat.spec --noconfirm",
+      "command": "python generate_version_file.py; pyinstaller codecat.spec --noconfirm",
       "group": {
         "kind": "build",
         "isDefault": true

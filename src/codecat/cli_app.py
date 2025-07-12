@@ -20,13 +20,6 @@ import typer
 from rich.console import Console
 from rich.json import JSON
 from rich.panel import Panel
-from rich.progress import (
-    BarColumn,
-    Progress,
-    SpinnerColumn,
-    TextColumn,
-    TimeElapsedColumn,
-)
 from rich.table import Table
 from typing_extensions import Annotated
 
@@ -203,63 +196,46 @@ def _process_files_parallel(
     max_workers: Optional[int],
 ) -> List[ProcessedFileData]:
     """
-    Processes a list of files in parallel, showing progress and handling errors.
+    Processes a list of files in parallel, showing a static message and handling errors.
     Returns a sorted list of ProcessedFileData objects.
     """
     processed_results: List[ProcessedFileData] = []
     is_verbose = effective_config.get("verbose", False)
     stop_on_error = effective_config.get("stop_on_error", False)
 
-    progress_ui = Progress(
-        SpinnerColumn(spinner_name="dots"),
-        TextColumn("[progress.description]{task.description}"),
-        BarColumn(),
-        TextColumn("[progress.percentage]{task.percentage:>3.0f}%"),
-        TimeElapsedColumn(),
-        console=console,
-    )
-    progress_context = progress_ui if show_ui else nullcontext()
+    if show_ui:
+        console.print(f"Processing {len(files_to_scan)} files...")
 
-    with progress_context as progress:
-        if show_ui:
-            assert progress is not None
-            task = progress.add_task(
-                "[green]Processing files...", total=len(files_to_scan)
-            )
-        else:
-            task = None
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        future_to_file = {
+            executor.submit(process_file, f, project_path, effective_config): f
+            for f in files_to_scan
+        }
+        for future in as_completed(future_to_file):
+            try:
+                result = future.result()
+                processed_results.append(result)
+                if is_verbose:
+                    if result.status == "text_content":
+                        console.print(f"[green]✔ Read:[/] {result.relative_path}")
+                    elif result.status == "binary_file":
+                        console.print(
+                            f"[yellow]! Skipped (binary):[/] {result.relative_path}"
+                        )
+                    else:
+                        console.print(
+                            f"[red]✖ Error ({result.status}):[/] {result.relative_path}"
+                        )
+            except Exception as e:
+                file_path = future_to_file[future]
+                console.print(
+                    f"[bold red]Critical error processing {file_path}: {e}[/bold red]"
+                )
+                if stop_on_error:
+                    raise typer.Exit(code=1)
 
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            future_to_file = {
-                executor.submit(process_file, f, project_path, effective_config): f
-                for f in files_to_scan
-            }
-            for future in as_completed(future_to_file):
-                try:
-                    result = future.result()
-                    processed_results.append(result)
-                    if is_verbose:
-                        if result.status == "text_content":
-                            console.print(f"[green]✔ Read:[/] {result.relative_path}")
-                        elif result.status == "binary_file":
-                            console.print(
-                                f"[yellow]! Skipped (binary):[/] {result.relative_path}"
-                            )
-                        else:
-                            console.print(
-                                f"[red]✖ Error ({result.status}):[/] {result.relative_path}"
-                            )
-                except Exception as e:
-                    file_path = future_to_file[future]
-                    console.print(
-                        f"[bold red]Critical error processing {file_path}: {e}[/bold red]"
-                    )
-                    if stop_on_error:
-                        raise typer.Exit(code=1)
-
-                if show_ui and task:
-                    assert progress is not None
-                    progress.update(task, advance=1)
+    if show_ui:
+        console.print("✔ Processing complete.")
 
     return sorted(processed_results, key=lambda p: p.relative_path)
 
