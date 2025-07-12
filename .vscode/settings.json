@@ -24,7 +24,7 @@
   // --- File Nesting for a Cleaner Explorer View ---
   "explorer.fileNesting.enabled": true,
   "explorer.fileNesting.patterns": {
-    "pyproject.toml": ".gitignore, .flake8, codecat.spec, .coverage",
+    "pyproject.toml": ".flake8, codecat.spec, .coverage",
     "README.md": "CODE_OF_CONDUCT.md, CONTRIBUTING.md, LICENSE",
     "generate_version_file.py": "file_version_info.txt"
   },
@@ -41,8 +41,5 @@
   // --- Testing Configuration ---
   "python.testing.pytestArgs": ["tests"],
   "python.testing.unittestEnabled": false,
-  "python.testing.pytestEnabled": true,
-
-  // --- Environment Configuration ---
-  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe"
+  "python.testing.pytestEnabled": true
 }

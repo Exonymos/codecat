@@ -7,4 +7,4 @@ from a project directory into a single, well-structured Markdown document.
 This package contains the core logic and metadata for the Codecat application.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"

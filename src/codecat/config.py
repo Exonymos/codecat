@@ -100,7 +100,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
         "test",
     ],
     "_comment_files": "List specific, exact file names to exclude.",
-    "exclude_files": ["codecat_config.json", "codecat_output.md"],
+    "exclude_files": [".codecat_config.json", "codecat_output.md"],
     "_comment_settings": "General application settings.",
     "max_file_size_kb": 1024,
     "stop_on_error": False,
