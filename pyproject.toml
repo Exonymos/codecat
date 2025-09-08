@@ -26,7 +26,7 @@ classifiers = [
   "Environment :: Console",
   "Typing :: Typed",
 ]
-dependencies = ["typer>=0.14,<0.17", "rich>=13,<15", "shellingham>=1.5,<2"]
+dependencies = ["typer>=0.14,<0.18", "rich>=13,<15", "shellingham>=1.5,<2"]
 
 [project.optional-dependencies]
 dev = [
