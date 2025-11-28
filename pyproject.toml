@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 # --- Project Metadata ---
 [project]
 name = "codecat"
-version = "1.0.1"
+version = "1.0.2"
 description = "A powerful, feature-rich command-line tool to aggregate source code into a single Markdown file."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -26,15 +26,15 @@ classifiers = [
   "Environment :: Console",
   "Typing :: Typed",
 ]
-dependencies = ["typer>=0.14,<0.17", "rich>=13,<15", "shellingham>=1.5,<2"]
+dependencies = ["typer>=0.14,<0.21", "rich>=13,<15", "shellingham>=1.5,<2"]
 
 [project.optional-dependencies]
 dev = [
   "black>=24,<26",
   "flake8>=7,<8",
   "pyright>=1.1,<2",
-  "pytest>=8,<9",
-  "pytest-cov>=6,<7",
+  "pytest>=8,<10",
+  "pytest-cov>=6,<8",
   "pytest-mock>=3,<4",
   "pyinstaller>=6,<7",
 ]
