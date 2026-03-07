@@ -49,6 +49,12 @@ Codecat is a lightning-fast, Python-powered CLI tool that **aggregates your enti
 - **Dynamic fence handling** for code blocks containing backticks
 - **Glob pattern support** for flexible file inclusion/exclusion
 
+### 🌐 **Interactive Web UI**
+
+- **Visual Dashboard** provides a browser-based interface to manage everything
+- **Fully Offline** operation with bundled assets—no internet required
+- **Seamless Integration** perfectly reflects all CLI capabilities
+
 ### ⚙️ **Highly Configurable**
 
 - **JSON configuration** with sensible defaults
@@ -123,6 +129,7 @@ codecat stats .
 | Command                   | Description                               | Example                    |
 | ------------------------- | ----------------------------------------- | -------------------------- |
 | `codecat run <path>`      | Scan directory and create Markdown output | `codecat run ./my-project` |
+| `codecat web`             | Launch the interactive Web UI             | `codecat web`              |
 | `codecat stats <path>`    | Show project statistics without output    | `codecat stats .`          |
 | `codecat generate-config` | Create configuration template             | `codecat generate-config`  |
 
@@ -154,6 +161,9 @@ codecat run .
 ```bash
 # Simple scan of current directory
 codecat run .
+
+# Launch the interactive web interface
+codecat web
 
 # Scan specific directory with custom output
 codecat run ./my-project --output-file "project-complete.md"

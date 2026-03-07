@@ -56,7 +56,7 @@ def generate_markdown(
     lang_map = config.get("language_hints", {})
 
     if config.get("generate_header", True):
-        project_path_str = str(project_root_path).replace("\\", "/")
+        project_path_str = project_root_path.as_posix()
         main_parts.append(f"# Codecat: Aggregated Code for '{project_root_path.name}'")
         main_parts.append(
             f"Generated from `{len(processed_files)}` files found in `{project_path_str}`.\n"
@@ -65,7 +65,7 @@ def generate_markdown(
     file_blocks: List[str] = []
     for file_data in processed_files:
         block_parts: List[str] = []
-        relative_path_str = str(file_data.relative_path).replace("\\", "/")
+        relative_path_str = file_data.relative_path.as_posix()
         block_parts.append(f"## File: `{relative_path_str}`\n")
 
         if file_data.status == "text_content" and file_data.content is not None:

@@ -10,11 +10,9 @@ effective configuration used by the application.
 
 import copy
 import json
+import logging
 from pathlib import Path
 from typing import Any, Optional
-
-import typer
-from typer import colors as typer_colors
 
 # Import constants for default config file names.
 from codecat.constants import DEFAULT_CONFIG_FILENAME, DEFAULT_OUTPUT_FILENAME
@@ -354,10 +352,10 @@ def _load_user_config_from_file(
                 }
                 return user_config, True
         except (json.JSONDecodeError, IOError) as e:
-            typer.secho(
-                f"Notice: Could not load or parse config '{config_path.resolve()}'. Error: {e}.",
-                fg=typer_colors.YELLOW,
-                err=True,
+            logging.warning(
+                "Notice: Could not load or parse config '%s'. Error: %s.",
+                config_path.resolve(),
+                e,
             )
             return None, False
     return None, False

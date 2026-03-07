@@ -9,6 +9,7 @@ This script is invoked by the console script defined in setup configuration,
 and also serves as the entry for PyInstaller-built executables.
 """
 
+import logging
 import os
 import sys
 
@@ -39,7 +40,7 @@ def main():
                 "Example Usage:\n"
                 "  [cyan]codecat --help[/cyan]\n\n"
                 "For more information, visit the GitHub README:\n"
-                "  [cyan][link=https://github.com/exonymos/codecat?tab=readme-ov-file#-codecat]https://github.com/exonymos/codecat[/link][/cyan]",
+                "  [cyan][link=https://github.com/exonymos/codecat]https://github.com/exonymos/codecat[/link][/cyan]",
                 title="Usage Error",
                 border_style="red",
                 padding=(1, 2),
@@ -50,8 +51,14 @@ def main():
         os.system("pause")
         sys.exit(1)
 
+    logging.basicConfig(
+        level=logging.WARNING,
+        stream=sys.stderr,
+        format="%(message)s",
+    )
+
     # If it's a valid terminal session or has arguments, run the main Typer app.
-    app()
+    app(prog_name="codecat")
 
 
 if __name__ == "__main__":
