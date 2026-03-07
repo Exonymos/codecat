@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 # --- Project Metadata ---
 [project]
 name = "codecat"
-version = "1.0.2"
+version = "1.1.0"
 description = "A powerful, feature-rich command-line tool to aggregate source code into a single Markdown file."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -19,7 +19,7 @@ classifiers = [
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
-  "License :: OSI Approved :: GPL-3.0-only",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
   "Operating System :: OS Independent",
   "Topic :: Software Development :: Documentation",
   "Topic :: Text Processing",

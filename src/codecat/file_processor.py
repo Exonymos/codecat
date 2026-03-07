@@ -46,9 +46,7 @@ def _is_likely_binary_by_nulls(chunk: bytes) -> bool:
     if not chunk:
         return False
     null_bytes = chunk.count(b"\x00")
-    return (
-        len(chunk) > 0 and (null_bytes / len(chunk)) * 100 > NULL_BYTE_THRESHOLD_PERCENT
-    )
+    return (null_bytes / len(chunk)) * 100 > NULL_BYTE_THRESHOLD_PERCENT
 
 
 def _try_decode_bytes(

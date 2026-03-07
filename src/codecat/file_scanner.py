@@ -9,13 +9,16 @@ the application's configuration to build the final file list.
 """
 
 import fnmatch
+import logging
 import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
-import typer
 from rich.status import Status
-from typer import colors as typer_colors
+
+# --- Module-level constants ---
+
+CASE_SENSITIVE_MATCHING: bool = False
 
 # --- Internal Helper Functions for Pattern Matching ---
 
@@ -65,10 +68,9 @@ def _passes_file_specific_checks(
     """Performs checks specific to files: explicit exclusion by name and max size."""
     if abs_item_path in exclude_files_abs:
         if is_verbose:
-            typer.secho(
-                f"Skipping explicitly excluded file: {abs_item_path.relative_to(project_root_path)}",
-                fg=typer_colors.YELLOW,
-                err=True,
+            logging.debug(
+                "Skipping explicitly excluded file: %s",
+                abs_item_path.relative_to(project_root_path),
             )
         return False
 
@@ -76,18 +78,19 @@ def _passes_file_specific_checks(
         file_size = abs_item_path.stat().st_size
         if file_size > max_size_bytes:
             if is_verbose:
-                typer.secho(
-                    f"Skipping large file: {abs_item_path.relative_to(project_root_path)} ({file_size / 1024:.2f}KB > {max_size_bytes / 1024:.0f}KB)",
-                    fg=typer_colors.YELLOW,
-                    err=True,
+                logging.debug(
+                    "Skipping large file: %s (%.2fKB > %.0fKB)",
+                    abs_item_path.relative_to(project_root_path),
+                    file_size / 1024,
+                    max_size_bytes / 1024,
                 )
             return False
-    except (FileNotFoundError, Exception) as e:
+    except OSError as e:
         if is_verbose:
-            typer.secho(
-                f"Warning: Could not get size for file {abs_item_path}: {e}",
-                fg=typer_colors.RED,
-                err=True,
+            logging.warning(
+                "Warning: Could not get size for file %s: %s",
+                abs_item_path,
+                e,
             )
         return False
     return True
@@ -106,7 +109,6 @@ def scan_project(
     Scans the project directory using os.walk for efficiency and returns a list of files.
     """
     included_files_set: Set[Path] = set()
-    case_sensitive_matching = False
 
     exclude_dirs_set: Set[str] = set(config.get("exclude_dirs", []))
     exclude_files_abs: Set[Path] = {
@@ -137,7 +139,7 @@ def scan_project(
                 continue
 
             if _is_path_excluded_by_pattern(
-                dir_rel_path_str, exclude_patterns, case_sensitive_matching
+                dir_rel_path_str, exclude_patterns, CASE_SENSITIVE_MATCHING
             ):
                 continue
 
@@ -155,12 +157,12 @@ def scan_project(
             )
 
             if _is_path_excluded_by_pattern(
-                relative_path_str, exclude_patterns, case_sensitive_matching
+                relative_path_str, exclude_patterns, CASE_SENSITIVE_MATCHING
             ):
                 continue
 
             if not _is_path_included_by_pattern(
-                relative_path_str, include_patterns, case_sensitive_matching
+                relative_path_str, include_patterns, CASE_SENSITIVE_MATCHING
             ):
                 continue
 
@@ -175,10 +177,6 @@ def scan_project(
 
             included_files_set.add(abs_file_path)
             if is_verbose:
-                typer.secho(
-                    f"Including file: {relative_path_str}",
-                    fg=typer_colors.GREEN,
-                    err=True,
-                )
+                logging.debug("Including file: %s", relative_path_str)
 
     return sorted(list(included_files_set))

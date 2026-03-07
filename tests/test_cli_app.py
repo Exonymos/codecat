@@ -53,7 +53,7 @@ def test_generate_config_aborts_if_user_says_no_to_overwrite(
 
 def test_generate_config_handles_io_error(tmp_path: Path, mocker, strip_ansi_codes):
     """Ensures `generate-config` handles I/O errors during file writing."""
-    mocker.patch("builtins.open", side_effect=IOError("Disk full"))
+    mocker.patch("pathlib.Path.write_text", side_effect=IOError("Disk full"))
     result = runner.invoke(
         app, ["generate-config", "--output-dir", str(tmp_path)], input="y\n"
     )

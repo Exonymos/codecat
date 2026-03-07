@@ -68,17 +68,19 @@ def test_cli_overrides_for_include_and_exclude_patterns(tmp_path: Path):
     assert config["exclude_patterns"] == ["*.map"]
 
 
-def test_handling_a_malformed_json_config(tmp_path: Path, capsys):
+def test_handling_a_malformed_json_config(tmp_path: Path, caplog):
     """Ensures a corrupt config file is handled gracefully without crashing."""
     user_config_path = tmp_path / ".codecat_config.json"
     user_config_path.write_text("{ 'malformed': json, }")  # Invalid JSON
 
-    config, loaded, _ = load_config(tmp_path)
+    import logging
+
+    with caplog.at_level(logging.WARNING):
+        config, loaded, _ = load_config(tmp_path)
+
     assert not loaded
     assert config["output_file"] == "codecat_output.md"  # Falls back to default
-
-    captured = capsys.readouterr()
-    assert "Notice: Could not load or parse config" in captured.err
+    assert "Notice: Could not load or parse config" in caplog.text
 
 
 def test_merging_language_hints(tmp_path: Path):

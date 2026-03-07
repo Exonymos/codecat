@@ -1,21 +1,20 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-block_cipher = None
 
 a = Analysis(
     ['src/codecat/__main__.py'],
-    pathex=['src'],
+    pathex=[],
     binaries=[],
-    datas=[('assets/favicon.ico', '.')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
+    hooksconfig={},
     runtime_hooks=[],
     excludes=[],
     noarchive=False,
     optimize=0,
 )
-
-pyz = PYZ(a.pure, cipher=block_cipher)
+pyz = PYZ(a.pure)
 
 exe = EXE(
     pyz,
@@ -31,7 +30,9 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,
-    icon='assets/favicon.ico',
-    include_binaries=True,
-    version='file_version_info.txt',
+    disable_windowed_traceback=False,
+    argv_emulation=False,
+    target_arch=None,
+    codesign_identity=None,
+    entitlements_file=None,
 )

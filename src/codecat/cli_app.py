@@ -14,7 +14,7 @@ from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import nullcontext
 from pathlib import Path
-from typing import List, Optional
+from typing import Optional
 
 import typer
 from rich.console import Console
@@ -30,6 +30,7 @@ from codecat.constants import DEFAULT_CONFIG_FILENAME
 from codecat.file_processor import ProcessedFileData, process_file
 from codecat.file_scanner import scan_project
 from codecat.markdown_generator import generate_markdown
+from codecat.web_ui import start_web_app
 
 # --- Initialize Rich Console for output ---
 console = Console(stderr=True, highlight=False)
@@ -78,7 +79,7 @@ ConfigPath = Annotated[
 ]
 
 IncludePatterns = Annotated[
-    Optional[List[str]],
+    Optional[list[str]],
     typer.Option(
         "--include",
         "-i",
@@ -87,7 +88,7 @@ IncludePatterns = Annotated[
 ]
 
 ExcludePatterns = Annotated[
-    Optional[List[str]],
+    Optional[list[str]],
     typer.Option(
         "--exclude",
         "-e",
@@ -98,7 +99,7 @@ ExcludePatterns = Annotated[
 
 # --- Helper Functions for Rich UI and Output ---
 def _create_summary_table(
-    processed_results: List[ProcessedFileData], project_path: Path
+    processed_results: list[ProcessedFileData], project_path: Path
 ) -> Table:
     """Creates a Rich Table summarizing the results of a scan."""
     summary = Table(
@@ -156,7 +157,7 @@ def _log_initial_info(
 
 def _scan_project_files(
     project_path: Path, effective_config: dict, show_ui: bool
-) -> List[Path]:
+) -> list[Path]:
     """Scans the project for files to process, handling UI and errors."""
     scan_status_text = f"Scanning files in [cyan]'{project_path.name}'[/cyan]..."
     scan_context = (
@@ -189,17 +190,17 @@ def _scan_project_files(
 
 
 def _process_files_parallel(
-    files_to_scan: List[Path],
+    files_to_scan: list[Path],
     project_path: Path,
     effective_config: dict,
     show_ui: bool,
     max_workers: Optional[int],
-) -> List[ProcessedFileData]:
+) -> list[ProcessedFileData]:
     """
     Processes a list of files in parallel, showing a static message and handling errors.
     Returns a sorted list of ProcessedFileData objects.
     """
-    processed_results: List[ProcessedFileData] = []
+    processed_results: list[ProcessedFileData] = []
     is_verbose = effective_config.get("verbose", False)
     stop_on_error = effective_config.get("stop_on_error", False)
 
@@ -263,7 +264,7 @@ def _orchestrate_scan(
     effective_config: dict,
     show_ui: bool,
     max_workers: Optional[int],
-) -> List[ProcessedFileData]:
+) -> list[ProcessedFileData]:
     """
     Handles the shared logic of scanning and processing files for any command.
 
@@ -340,6 +341,8 @@ def run(
     Scans a project, aggregates files, and compiles them into a single Markdown file.
     """
     is_verbose = verbose and not silent
+    # NOTE: Checking for pytest in sys.modules avoids the Rich Status spinner conflicting
+    # with the test runner's output capture. This is a deliberate practical trade-off;
     is_testing = "pytest" in sys.modules
     show_ui = not is_verbose and not silent and not is_testing
 
@@ -431,7 +434,8 @@ def stats(
     ]
 
     for file_data in text_files:
-        assert file_data.content is not None
+        if file_data.content is None:
+            continue
         lang = lang_map.get(file_data.path.suffix.lower(), "text")
         lang_counts[lang] += 1
         num_lines = len(file_data.content.splitlines())
@@ -515,8 +519,9 @@ def generate_config(
             raise typer.Exit(code=1)
 
     try:
-        with open(config_file_path, "w", encoding="utf-8") as f:
-            json.dump(DEFAULT_CONFIG, f, indent=4)
+        config_file_path.write_text(
+            json.dumps(DEFAULT_CONFIG, indent=4), encoding="utf-8"
+        )
         console.print(
             f"Successfully generated config file: [green]{config_file_path.resolve()}[/green]"
         )
@@ -525,6 +530,31 @@ def generate_config(
             f"[bold red]Error writing config file '{config_file_path.resolve()}': {e}[/bold red]"
         )
         raise typer.Exit(code=1)
+
+
+@app.command(name="web")
+def web(
+    project_path: ProjectPath = Path("."),
+    port: Annotated[
+        int,
+        typer.Option(
+            "--port",
+            "-p",
+            help="The port to bind the web server to. Defaults to 8080. If in use, it will find the next available port.",
+        ),
+    ] = 8080,
+):
+    """
+    Launch the optional Codecat Web Interface.
+    """
+    console.print(
+        Panel(
+            f"🌐 [bold]Starting Codecat Web Interface[/bold]\n"
+            f"Target Directory: [cyan]{project_path.resolve()}[/cyan]",
+            border_style="magenta",
+        )
+    )
+    start_web_app(port=port, project_path=project_path)
 
 
 @app.callback()

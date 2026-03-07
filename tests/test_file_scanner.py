@@ -237,7 +237,7 @@ def test_scanning_a_subdirectory(tmp_path: Path):
     assert files == expected, "Scanning a subdirectory with relative excludes failed"
 
 
-def test_verbose_output_for_skipped_items(tmp_path: Path, capsys, strip_ansi_codes):
+def test_verbose_output_for_skipped_items(tmp_path: Path, caplog, strip_ansi_codes):
     """Ensures that verbose mode correctly logs the reasons for skipping files and dirs."""
     structure = {
         "large_file.txt": "a" * 2048,
@@ -251,11 +251,13 @@ def test_verbose_output_for_skipped_items(tmp_path: Path, capsys, strip_ansi_cod
         "exclude_dirs": ["docs"],
         "include_patterns": ["*.txt", "*.md"],
     }
-    run_scan_with_config(tmp_path, structure, config_overrides)
-    captured = capsys.readouterr()
-    stderr = strip_ansi_codes(captured.err)
-    assert "Skipping large file: large_file.txt" in stderr
-    assert "Skipping explicitly excluded file: explicitly_excluded.txt" in stderr
+    import logging
+
+    with caplog.at_level(logging.DEBUG):
+        run_scan_with_config(tmp_path, structure, config_overrides)
+
+    assert "Skipping large file: large_file.txt" in caplog.text
+    assert "Skipping explicitly excluded file: explicitly_excluded.txt" in caplog.text
 
 
 def test_scanner_handles_stat_error_gracefully(tmp_path: Path, mocker):
