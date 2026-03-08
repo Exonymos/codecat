@@ -3,9 +3,9 @@
 
 a = Analysis(
     ['src/codecat/__main__.py'],
-    pathex=['src'],
+    pathex=[],
     binaries=[],
-    datas=[('assets/favicon.ico', '.')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
