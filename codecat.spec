@@ -3,9 +3,9 @@
 
 a = Analysis(
     ['src/codecat/__main__.py'],
-    pathex=[],
+    pathex=['src'],
     binaries=[],
-    datas=[],
+    datas=[('assets/favicon.ico', '.')],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
@@ -30,6 +30,8 @@ exe = EXE(
     upx_exclude=[],
     runtime_tmpdir=None,
     console=True,
+    icon='assets/favicon.ico',
+    version='file_version_info.txt',
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
