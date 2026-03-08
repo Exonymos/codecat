@@ -15,6 +15,7 @@ from typer.testing import CliRunner
 from codecat import __version__
 from codecat.cli_app import app
 from codecat.constants import DEFAULT_CONFIG_FILENAME
+from codecat.file_processor import ProcessedFileData
 
 # Use a test runner with a fixed terminal size for predictable UI output.
 runner = CliRunner(env={"TERM": "xterm-256color", "COLUMNS": "130"})
@@ -29,7 +30,8 @@ def test_version_flag_works_correctly(strip_ansi_codes):
 
 
 def test_generate_config_creates_file(tmp_path: Path, strip_ansi_codes):
-    """Ensures `generate-config` creates a default config file in the target directory."""
+    """Ensures `generate-config` creates a default config file in the target
+    directory."""
     result = runner.invoke(app, ["generate-config", "--output-dir", str(tmp_path)])
     assert result.exit_code == 0
     assert "Successfully generated config file" in strip_ansi_codes(result.stderr)
@@ -39,7 +41,8 @@ def test_generate_config_creates_file(tmp_path: Path, strip_ansi_codes):
 def test_generate_config_aborts_if_user_says_no_to_overwrite(
     tmp_path: Path, strip_ansi_codes
 ):
-    """Ensures `generate-config` aborts if the file exists and the user declines to overwrite."""
+    """Ensures `generate-config` aborts if the file exists and the user
+    declines to overwrite."""
     config_file = tmp_path / DEFAULT_CONFIG_FILENAME
     config_file.write_text("original content")
 
@@ -160,3 +163,38 @@ def test_run_command_with_no_matching_files(tmp_path: Path, strip_ansi_codes):
     assert result.exit_code == 0
     clean_output = strip_ansi_codes(result.stderr)
     assert "No files found" in clean_output
+
+
+def test_run_verbose_shows_error_status(tmp_path: Path, mocker, strip_ansi_codes):
+    """Covers the ✖ Error verbose branch in _process_files_parallel."""
+    (tmp_path / "bad.py").write_text("pass")
+    mocker.patch(
+        "codecat.cli_app.process_file",
+        return_value=ProcessedFileData(
+            path=tmp_path / "bad.py",
+            relative_path=Path("bad.py"),
+            status="read_error",
+            error_message="boom",
+        ),
+    )
+    result = runner.invoke(app, ["run", str(tmp_path), "--verbose"])
+    assert "✖ Error" in strip_ansi_codes(result.stderr)
+
+
+def test_scan_error_with_stop_on_error(tmp_path: Path, mocker, strip_ansi_codes):
+    """Covers the stop_on_error branch in _scan_project_files."""
+    mocker.patch("codecat.cli_app.scan_project", side_effect=RuntimeError("disk fail"))
+    mocker.patch(
+        "codecat.cli_app.load_config",
+        return_value=({"stop_on_error": True, "verbose": False}, None, None),
+    )
+    result = runner.invoke(app, ["run", str(tmp_path)])
+    assert result.exit_code != 0
+
+
+def test_stats_with_no_text_files(tmp_path: Path, strip_ansi_codes):
+    """Covers the stats command when only binary files are present."""
+    (tmp_path / "image.png").write_bytes(b"\x89PNG\r\n\x1a\n")
+    result = runner.invoke(app, ["stats", str(tmp_path), "--include", "*.png"])
+    assert result.exit_code == 0
+    assert "File Type Statistics" in strip_ansi_codes(result.stderr)

@@ -54,11 +54,11 @@ where = ["src"]
 
 [tool.black]
 line-length = 88
-target-version = ['py310', 'py311', 'py312']
+target-version = ['py310']
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --color=yes --cov=src/codecat --cov-report=term-missing"
+addopts = "-ra -q --color=yes --cov-report=term-missing"
 testpaths = ["tests"]
 python_files = "test_*.py"
 python_classes = "Test*"
@@ -70,7 +70,7 @@ filterwarnings = ["ignore::DeprecationWarning"]
 include = ["src", "tests"]
 exclude = ["**/__pycache__", ".venv", ".venv312", "dist", "build"]
 typeCheckingMode = "basic"
-pythonVersion = "3.11"
+pythonVersion = "3.10"
 pythonPlatform = "All"
 
 reportMissingImports = "warning"

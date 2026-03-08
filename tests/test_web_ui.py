@@ -399,8 +399,19 @@ class TestHTTPServer:
 
     def test_post_config_body_too_large_returns_400(self, server):
         host, port, _ = server
-        big = json.dumps({"outputFile": "x" * (65 * 1024)}).encode()
-        status, body = _post(host, port, "/api/config", big)
+        conn = http.client.HTTPConnection(host, port, timeout=5)
+        conn.request(
+            "POST",
+            "/api/config",
+            body=b"{}",
+            headers={
+                "Content-Type": "application/json",
+                "Content-Length": str(65 * 1024 + 1),
+            },
+        )
+        resp = conn.getresponse()
+        status = resp.status
+        body = resp.read()
         assert status == 400
         data = json.loads(body)
         assert "64 KB" in data["error"]
@@ -424,3 +435,30 @@ class TestHTTPServer:
         assert status == 400
         data = json.loads(body)
         assert "64 KB" in data["error"]
+
+    def test_get_config_corrupt_json(self, server):
+        """Covers the JSONDecodeError path in _handle_get_config."""
+        host, port, project_path = server
+        (project_path / ".codecat_config.json").write_text(
+            "not valid json", encoding="utf-8"
+        )
+        status, body = _get(host, port, "/api/config")
+        assert status == 200
+        data = json.loads(body)
+        assert data["success"] is False
+
+    def test_post_run_invalid_project_path(self, tmp_path: Path):
+        """Covers the is_dir() check in _handle_post_run."""
+        non_dir = tmp_path / "not_a_dir.txt"
+        non_dir.write_text("x")
+        port = _free_port()
+        httpd = _ReuseAddrServer(("127.0.0.1", port), _make_handler(non_dir))
+        thread = threading.Thread(target=httpd.serve_forever, daemon=True)
+        thread.start()
+        try:
+            status, body = _post("127.0.0.1", port, "/api/run", b"{}")
+            assert status == 400
+            assert b"not a valid directory" in body
+        finally:
+            httpd.shutdown()
+            httpd.server_close()

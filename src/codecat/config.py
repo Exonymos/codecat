@@ -20,9 +20,9 @@ from codecat.constants import DEFAULT_CONFIG_FILENAME, DEFAULT_OUTPUT_FILENAME
 # Default configuration for Codecat.
 # Keys starting with "_" are treated as comments and ignored by the parser.
 DEFAULT_CONFIG: dict[str, Any] = {
-    "_comment_main": "This is the default configuration for Codecat. You can customize it for your project.",
+    "_comment_main": "This is the default configuration for Codecat. You can customize it for your project.",  # noqa: E501
     "output_file": DEFAULT_OUTPUT_FILENAME,
-    "_comment_patterns": "Use glob patterns (like *.py, src/*) to control which files are included or excluded.",
+    "_comment_patterns": "Use glob patterns (like *.py, src/*) to control which files are included or excluded.",  # noqa: E501
     "include_patterns": [
         "*.py",
         "*.pyw",
@@ -234,7 +234,7 @@ DEFAULT_CONFIG: dict[str, Any] = {
     "max_file_size_kb": 1024,
     "stop_on_error": False,
     "generate_header": True,
-    "_comment_languages": "Map file extensions to language hints for Markdown code blocks.",
+    "_comment_languages": "Map file extensions to language hints for Markdown code blocks.",  # noqa: E501
     "language_hints": {
         ".py": "python",
         ".pyw": "python",

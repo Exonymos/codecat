@@ -116,7 +116,8 @@ def test_include_patterns_filter_correctly(tmp_path: Path):
 
 
 def test_empty_include_patterns_includes_all_non_excluded_files(tmp_path: Path):
-    """Ensures that an empty `include_patterns` list includes all files not otherwise excluded."""
+    """Ensures that an empty `include_patterns` list includes all files
+    not otherwise excluded."""
     structure = {
         "file.py": "",
         "file.txt": "",
@@ -193,7 +194,8 @@ def test_max_file_size_limit(tmp_path: Path):
 
 
 def test_exclude_pattern_overrides_include_pattern(tmp_path: Path):
-    """Ensures that an `exclude_patterns` rule takes precedence over an `include_patterns` rule."""
+    """Ensures that an `exclude_patterns` rule takes precedence over an
+    `include_patterns` rule."""
     structure = {
         "feature.py": "",
         "feature_test.py": "",
@@ -209,7 +211,8 @@ def test_exclude_pattern_overrides_include_pattern(tmp_path: Path):
 
 
 def test_scanning_a_subdirectory(tmp_path: Path):
-    """Ensures scanning a specific subdirectory works correctly while applying root-level rules."""
+    """Ensures scanning a specific subdirectory works correctly while applying
+    root-level rules."""
     structure = {
         "file_in_root.txt": "root content",
         "target_dir": {
@@ -238,7 +241,8 @@ def test_scanning_a_subdirectory(tmp_path: Path):
 
 
 def test_verbose_output_for_skipped_items(tmp_path: Path, caplog, strip_ansi_codes):
-    """Ensures that verbose mode correctly logs the reasons for skipping files and dirs."""
+    """Ensures that verbose mode correctly logs the reasons for skipping
+    files and dirs."""
     structure = {
         "large_file.txt": "a" * 2048,
         "explicitly_excluded.txt": "content",

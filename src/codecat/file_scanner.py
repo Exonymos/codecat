@@ -26,7 +26,7 @@ CASE_SENSITIVE_MATCHING: bool = False
 def _is_path_excluded_by_pattern(
     relative_path_str: str, patterns: List[str], case_sensitive: bool = False
 ) -> bool:
-    """Determines if a given relative path string matches any exclusion glob patterns."""
+    """Determines if a relative path string matches any exclusion glob patterns."""
     path_to_match = relative_path_str if case_sensitive else relative_path_str.lower()
     for pattern_item in patterns:
         pattern_to_match = pattern_item if case_sensitive else pattern_item.lower()
@@ -46,7 +46,7 @@ def _is_path_excluded_by_pattern(
 def _is_path_included_by_pattern(
     relative_path_str: str, patterns: List[str], case_sensitive: bool = False
 ) -> bool:
-    """Checks if a given relative path string matches any of the inclusion glob patterns."""
+    """Checks if a relative path string matches any of the inclusion glob patterns."""
     if not patterns:  # If no include patterns, everything is implicitly included
         return True
 
@@ -106,7 +106,8 @@ def scan_project(
     status_indicator: Optional[Status] = None,
 ) -> List[Path]:
     """
-    Scans the project directory using os.walk for efficiency and returns a list of files.
+    Scans the project directory using os.walk for efficiency and returns
+    a list of files.
     """
     included_files_set: Set[Path] = set()
 

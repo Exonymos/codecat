@@ -38,7 +38,7 @@ console = Console(stderr=True, highlight=False)
 # Initialize the Typer CLI app with custom help and settings.
 app = typer.Typer(
     name="codecat",
-    help="🐾 [bold]Codecat CLI[/bold] — A powerful tool to aggregate source code and text into a single Markdown file.",
+    help="🐾 [bold]Codecat CLI[/bold] — A powerful tool to aggregate source code and text into a single Markdown file.",  # noqa: E501
     add_completion=False,
     rich_markup_mode="rich",
     context_settings={"help_option_names": ["-h", "--help"]},
@@ -70,7 +70,7 @@ ConfigPath = Annotated[
     typer.Option(
         "--config",
         "-c",
-        help=f"Path to a custom config file. If not provided, looks for [cyan]{DEFAULT_CONFIG_FILENAME}[/cyan] in the project path.",
+        help=f"Path to a custom config file. If not provided, looks for [cyan]{DEFAULT_CONFIG_FILENAME}[/cyan] in the project path.",  # noqa: E501
         resolve_path=True,
         file_okay=True,
         dir_okay=False,
@@ -83,7 +83,7 @@ IncludePatterns = Annotated[
     typer.Option(
         "--include",
         "-i",
-        help='Glob pattern for files to include. [bold]Use multiple times for multiple patterns[/bold] (e.g., -i "*.py" -i "*.js").',
+        help='Glob pattern for files to include. [bold]Use multiple times for multiple patterns[/bold] (e.g., -i "*.py" -i "*.js").',  # noqa: E501
     ),
 ]
 
@@ -92,7 +92,7 @@ ExcludePatterns = Annotated[
     typer.Option(
         "--exclude",
         "-e",
-        help='Glob pattern to exclude files or directories. [bold]Use multiple times for multiple patterns[/bold] (e.g., -e "dist/*").',
+        help='Glob pattern to exclude files or directories. [bold]Use multiple times for multiple patterns[/bold] (e.g., -e "dist/*").',  # noqa: E501
     ),
 ]
 
@@ -146,7 +146,8 @@ def _log_initial_info(
     """Prints the initial startup panel and configuration if verbose is enabled."""
     console.print(
         Panel(
-            f"🐾 [bold]Codecat v{__version__}[/bold] | Processing: [cyan]'{project_path.resolve()}'[/cyan]",
+            f"🐾 [bold]Codecat v{__version__}[/bold] | "
+            f"Processing: [cyan]'{project_path.resolve()}'[/cyan]",
             border_style="blue",
         )
     )
@@ -178,7 +179,8 @@ def _scan_project_files(
 
     if not files_to_scan:
         console.print(
-            "\n[yellow]No files found to aggregate based on the current configuration.[/yellow]"
+            "\n[yellow]No files found to aggregate based on the "
+            "current configuration.[/yellow]"
         )
         raise typer.Exit()
 
@@ -249,12 +251,14 @@ def _write_markdown_output(
         output_file_path.write_text(markdown_content, encoding="utf-8")
         if not silent:
             console.print(
-                f"\n[bold green]✔ Success![/bold green] Aggregated {num_files} files into:"
+                f"\n[bold green]✔ Success![/bold green] "
+                f"Aggregated {num_files} files into:"
             )
             console.print(f"[cyan]{output_file_path.resolve()}[/cyan]")
     except IOError as e:
         console.print(
-            f"\n[bold red]Error writing to output file '{output_file_path.resolve()}': {e}[/bold red]"
+            f"\n[bold red]Error writing to output file "
+            f"'{output_file_path.resolve()}': {e}[/bold red]"
         )
         raise typer.Exit(code=1)
 
@@ -294,7 +298,7 @@ def run(
         typer.Option(
             "--output-file",
             "-o",
-            help="Name for the output Markdown file. [bold]Overrides config setting.[/bold]",
+            help="Name for the output Markdown file. [bold]Overrides config setting.[/bold]",  # noqa: E501
         ),
     ] = None,
     include_patterns_override: IncludePatterns = None,
@@ -312,14 +316,14 @@ def run(
         typer.Option(
             "--silent",
             "-s",
-            help="Suppress all informational output. Only critical errors will be shown.",
+            help="Suppress all informational output. Only critical errors will be shown.",  # noqa: E501
         ),
     ] = False,
     dry_run: Annotated[
         bool,
         typer.Option(
             "--dry-run",
-            help="Scan and process files, but [bold]do not write the output file.[/bold] Useful for previews.",
+            help="Scan and process files, but [bold]do not write the output file.[/bold] Useful for previews.",  # noqa: E501
         ),
     ] = False,
     no_header: Annotated[
@@ -333,7 +337,7 @@ def run(
         Optional[int],
         typer.Option(
             "--max-workers",
-            help="Set the max number of parallel threads. Defaults to an optimal number based on your system's cores.",
+            help="Set the max number of parallel threads. Defaults to an optimal number based on your system's cores.",  # noqa: E501
         ),
     ] = None,
 ):
@@ -341,8 +345,9 @@ def run(
     Scans a project, aggregates files, and compiles them into a single Markdown file.
     """
     is_verbose = verbose and not silent
-    # NOTE: Checking for pytest in sys.modules avoids the Rich Status spinner conflicting
-    # with the test runner's output capture. This is a deliberate practical trade-off;
+    # NOTE: Checking for pytest in sys.modules avoids the Rich Status spinner
+    # conflicting with the test runner's output capture. This is a deliberate
+    # practical trade-off;
     is_testing = "pytest" in sys.modules
     show_ui = not is_verbose and not silent and not is_testing
 
@@ -368,7 +373,8 @@ def run(
 
     if dry_run:
         console.print(
-            "\n[bold yellow]--dry-run enabled. No output file will be written.[/bold yellow]"
+            "\n[bold yellow]--dry-run enabled. "
+            "No output file will be written.[/bold yellow]"
         )
         raise typer.Exit()
 
@@ -392,7 +398,7 @@ def stats(
         Optional[int],
         typer.Option(
             "--max-workers",
-            help="Set the max number of parallel threads. Defaults to an optimal number based on your system's cores.",
+            help="Set the max number of parallel threads. Defaults to an optimal number based on your system's cores.",  # noqa: E501
         ),
     ] = None,
 ):
@@ -414,7 +420,8 @@ def stats(
 
     console.print(
         Panel(
-            f"📊 [bold]Codecat Stats[/bold] | Analyzing: [cyan]'{project_path.resolve()}'[/cyan]",
+            f"📊 [bold]Codecat Stats[/bold] | "
+            f"Analyzing: [cyan]'{project_path.resolve()}'[/cyan]",
             border_style="blue",
         )
     )
@@ -474,7 +481,7 @@ def generate_config(
         typer.Option(
             "--output-dir",
             "-o",
-            help="Directory to generate the config file in. Defaults to the current directory.",
+            help="Directory to generate the config file in. Defaults to the current directory.",  # noqa: E501
             resolve_path=True,
             file_okay=False,
             dir_okay=True,
@@ -485,7 +492,7 @@ def generate_config(
         str,
         typer.Option(
             "--config-file-name",
-            help=f"Name of the config file. Defaults to [cyan]{DEFAULT_CONFIG_FILENAME}[/cyan].",
+            help=f"Name of the config file. Defaults to [cyan]{DEFAULT_CONFIG_FILENAME}[/cyan].",  # noqa: E501
         ),
     ] = DEFAULT_CONFIG_FILENAME,
 ):
@@ -498,12 +505,14 @@ def generate_config(
             console.print(f"Created directory: [cyan]{output_dir.resolve()}[/cyan]")
         except Exception as e:
             console.print(
-                f"[bold red]Error:[/bold red] Could not create directory '{output_dir.resolve()}'. {e}"
+                f"[bold red]Error:[/bold red] Could not create directory "
+                f"'{output_dir.resolve()}'. {e}"
             )
             raise typer.Exit(code=1)
     elif not output_dir.is_dir():
         console.print(
-            f"[bold red]Error:[/bold red] Output path '{output_dir.resolve()}' exists but is not a directory."
+            f"[bold red]Error:[/bold red] Output path "
+            f"'{output_dir.resolve()}' exists but is not a directory."
         )
         raise typer.Exit(code=1)
 
@@ -511,7 +520,8 @@ def generate_config(
 
     if config_file_path.exists():
         console.print(
-            f"[yellow]Config file '{config_file_path.resolve()}' already exists.[/yellow]"
+            f"[yellow]Config file '{config_file_path.resolve()}' "
+            "already exists.[/yellow]"
         )
         overwrite = typer.confirm("Do you want to overwrite it?", default=False)
         if not overwrite:
@@ -523,11 +533,13 @@ def generate_config(
             json.dumps(DEFAULT_CONFIG, indent=4), encoding="utf-8"
         )
         console.print(
-            f"Successfully generated config file: [green]{config_file_path.resolve()}[/green]"
+            "Successfully generated config file: "
+            f"[green]{config_file_path.resolve()}[/green]"
         )
     except IOError as e:
         console.print(
-            f"[bold red]Error writing config file '{config_file_path.resolve()}': {e}[/bold red]"
+            f"[bold red]Error writing config file "
+            f"'{config_file_path.resolve()}': {e}[/bold red]"
         )
         raise typer.Exit(code=1)
 
@@ -540,7 +552,7 @@ def web(
         typer.Option(
             "--port",
             "-p",
-            help="The port to bind the web server to. Defaults to 8080. If in use, it will find the next available port.",
+            help="The port to bind the web server to. Defaults to 8080. If in use, it will find the next available port.",  # noqa: E501
         ),
     ] = 8080,
 ):
@@ -554,7 +566,7 @@ def web(
             border_style="magenta",
         )
     )
-    start_web_app(port=port, project_path=project_path)
+    start_web_app(port=port, project_path=project_path)  # pragma: no cover
 
 
 @app.callback()

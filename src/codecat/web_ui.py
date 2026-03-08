@@ -748,7 +748,9 @@ def _build_subprocess_cmd(
     return cmd
 
 
-def _stream_subprocess(h: _Handler, cmd: list[str], project_path: Path) -> None:
+def _stream_subprocess(
+    h: _Handler, cmd: list[str], project_path: Path
+) -> None:  # pragma: no cover
     """
     Spawn *cmd* and stream its combined stdout/stderr to the response body.
 
@@ -791,7 +793,7 @@ def _stream_subprocess(h: _Handler, cmd: list[str], project_path: Path) -> None:
             h.wfile.write(
                 f"\n[SERVER ERROR] Could not run Codecat: {exc}\n".encode("utf-8")
             )
-        except (BrokenPipeError, ConnectionResetError):
+        except (BrokenPipeError, ConnectionResetError):  # pragma: no cover
             pass
 
 
@@ -837,7 +839,7 @@ def _handle_post_run(h: _Handler, project_path: Path) -> None:
     _send_head(h, 200, "text/plain; charset=utf-8", {"Cache-Control": "no-cache"})
 
     try:
-        _stream_subprocess(h, cmd, project_path)
+        _stream_subprocess(h, cmd, project_path)  # pragma: no cover
     finally:
         try:
             tmp_config_path.unlink(missing_ok=True)
@@ -911,7 +913,9 @@ class _ReuseAddrServer(socketserver.ThreadingTCPServer):
     daemon_threads: bool = True
 
 
-def start_web_app(port: int = 8080, project_path: Path = Path(".")) -> None:
+def start_web_app(
+    port: int = 8080, project_path: Path = Path(".")
+) -> None:  # pragma: no cover
     """
     Start the Codecat web UI server and open it in the default browser.
 

@@ -109,10 +109,12 @@ def process_file(
     config: dict[str, Any],
 ) -> ProcessedFileData:
     """
-    Processes a single file: reads its content, detects if it's binary, or handles errors.
+    Processes a single file: reads its content, detects if it's binary,
+    or handles errors.
 
-    This function is designed to be a self-contained worker that does not perform
-    any direct console output. It returns a structured result for the main thread to handle.
+    This function is designed to be a self-contained worker that does not
+    perform any direct console output. It returns a structured result for the
+    main thread to handle.
     """
     stop_on_error = config.get("stop_on_error", False)
 

@@ -25,7 +25,8 @@ def main():
     it's assumed to be a double-click. A user-friendly message is shown, and
     the window is paused to prevent it from closing immediately.
     """
-    # This check is the most reliable way to detect a double-click on a frozen executable.
+    # This check is the most reliable way to detect
+    # a double-click on a frozen executable.
     # It runs before Typer, preventing Typer's default error message from appearing.
     if len(sys.argv) == 1 and getattr(sys, "frozen", False) and os.name == "nt":
         from rich.console import Console
@@ -40,7 +41,7 @@ def main():
                 "Example Usage:\n"
                 "  [cyan]codecat --help[/cyan]\n\n"
                 "For more information, visit the GitHub README:\n"
-                "  [cyan][link=https://github.com/exonymos/codecat]https://github.com/exonymos/codecat[/link][/cyan]",
+                "  [cyan][link=https://github.com/exonymos/codecat]https://github.com/exonymos/codecat[/link][/cyan]",  # noqa: E501
                 title="Usage Error",
                 border_style="red",
                 padding=(1, 2),
