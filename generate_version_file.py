@@ -15,11 +15,9 @@ Usage:
 
 import sys
 
-try:
-    # Try to use the built-in tomllib (Python 3.11+)
+if sys.version_info >= (3, 11):
     import tomllib
-except ImportError:
-    # If not available, fall back to tomli (for Python <3.11)
+else:
     try:
         import tomli as tomllib  # type: ignore[import]
     except ImportError:

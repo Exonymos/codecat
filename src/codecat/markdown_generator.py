@@ -59,7 +59,8 @@ def generate_markdown(
         project_path_str = project_root_path.as_posix()
         main_parts.append(f"# Codecat: Aggregated Code for '{project_root_path.name}'")
         main_parts.append(
-            f"Generated from `{len(processed_files)}` files found in `{project_path_str}`.\n"
+            f"Generated from `{len(processed_files)}` files found "
+            f"in `{project_path_str}`.\n"
         )
 
     file_blocks: List[str] = []
@@ -77,12 +78,14 @@ def generate_markdown(
                 block_parts.append(f"{fence}{lang_hint}\n{file_data.content}\n{fence}")
         elif file_data.status == "binary_file":
             block_parts.append(
-                f"`[INFO] Binary file detected at '{relative_path_str}'. Content not included.`"
+                f"`[INFO] Binary file detected at '{relative_path_str}'. "
+                "Content not included.`"
             )
         elif file_data.status in ["read_error", "skipped_access_error"]:
             error_msg = file_data.error_message or "An unknown error occurred."
             block_parts.append(
-                f"`[WARNING] Could not process file '{relative_path_str}'. Error: {error_msg}`"
+                f"`[WARNING] Could not process file '{relative_path_str}'. "
+                f"Error: {error_msg}`"
             )
 
         file_blocks.append("\n".join(block_parts))

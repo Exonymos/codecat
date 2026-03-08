@@ -10,7 +10,7 @@ max-line-length = 88
 # W504: line break after binary operator
 # E203: Whitespace before ':'
 # W291/W293: trailing/blank-line whitespace
-ignore = E501, W503, W504, E203, W291, W293
+ignore = W503, W504, E203
 
 # A list of files and directories to exclude from linting.
 exclude =
